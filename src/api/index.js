@@ -1,45 +1,45 @@
-import qs from 'qs';
+import qs from 'query-string';
 
-export const DOMAIN = 'http://localhost:3001/';
+export const ENDPOINT = '//localhost:3001/';
 
 class ApiCall {
-    constructor(domain) {
-        this.domain = domain;
-    }
+  constructor(domain) {
+    this.domain = domain;
+  }
 
-    async perform(url, data, config) {
-        const request = await fetch(`${this.domain}/${url}`, {
-            ...config,
-            body: JSON.stringify(data),
-            headers: {
-                'Content-type': 'application-json'
-            }
-        });
+  async perform(url, data, config) {
+    const request = await fetch(`${this.domain}${url}`, {
+      ...config,
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
 
-        return await request.json();
-    }
+    return await request.json();
+  }
 
-    async get(path, searchParams= {}) {
-        return await this.perform(`${path}?${qs.stringify(searchParams)}`)
-    }
+  async get(path, searchParams) {
+    return await this.perform(`${path}?${qs.stringify(searchParams)}`);
+  }
 
-    async post(path, data) {
-        return await this.perform(path, data, {
-            method: 'POST'
-        });
-    }
+  async post(path, payload) {
+    return await this.perform(path, payload, {
+      method: 'POST'
+    });
+  }
 
-    async put(path, payload) {
-        return await this.perform(path, payload, {
-            method: 'PUT'
-        });
-    }
+  async put(path, payload) {
+    return await this.perform(path, payload, {
+      method: 'PUT'
+    });
+  }
 
-    async delete(path, payload) {
-        return await this.perform(path, payload, {
-            method: 'DELETE'
-        });
-    }
+  async delete(path) {
+    return await this.perform(path, null, {
+      method: 'DELETE'
+    });
+  }
 }
 
-export default new ApiCall(DOMAIN);
+export default new ApiCall(ENDPOINT);
